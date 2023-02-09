@@ -39,7 +39,8 @@ Widget exp(String b,[Color colo=Colors.amber,]){
      style: ElevatedButton.styleFrom(
         backgroundColor: colo,
         fixedSize: Size(70, 70),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70))
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70)),
+        textStyle: TextStyle(color: Colors.black)
         ),
     onPressed: (){
     if(controller.text[controller.text.length - 1] == 'x'){
@@ -65,7 +66,7 @@ Widget exp(String b,[Color colo=Colors.amber,]){
     controller.text+=b;
   }, child: Text(b,style: TextStyle(fontSize: 30),));
 }
-  Widget wid(String a,[Color col=Colors.transparent]){
+  Widget wid(String a,[Color col=Colors.black]){
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: col,
@@ -80,13 +81,14 @@ Widget exp(String b,[Color colo=Colors.amber,]){
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Color.fromARGB(255, 97, 82, 81),
         body: Container(child: 
         Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 300),
               child: TextField(
-                style: TextStyle(fontSize: 40),
+                style: TextStyle(fontSize: 40,color: Colors.white),
                 textAlign: TextAlign.end,
                 
                 readOnly: true,
@@ -99,7 +101,7 @@ Widget exp(String b,[Color colo=Colors.amber,]){
             
                                   ElevatedButton(
                          style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.transparent,
           fixedSize: Size(70, 70),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70))
           ),
@@ -107,15 +109,15 @@ Widget exp(String b,[Color colo=Colors.amber,]){
                     controller.text = controller.text.substring(0, controller.text.length-controller.text.length);
                   }, child: Text('AC',style: TextStyle(fontSize: 20),)),
            
-              exp('%',Colors.transparent),
+              exp('%',Colors.transparent,),
     
             ElevatedButton(
                   style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.transparent,
           fixedSize: Size(70, 70),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70))
           ),onPressed: (){
-    
+            
                controller.text = controller.text.substring(0, controller.text.length-1);
              }, child: Text('C',style: TextStyle(fontSize: 20),)),
               exp('x')
@@ -147,7 +149,7 @@ Widget exp(String b,[Color colo=Colors.amber,]){
             Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
       
-                    wid('.',Color.fromARGB(255, 48, 48, 48)),
+                    wid('.',Colors.transparent),
                   wid('0'),
                 ElevatedButton(
                  style: ElevatedButton.styleFrom(
@@ -156,7 +158,7 @@ Widget exp(String b,[Color colo=Colors.amber,]){
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70))
           ),
                 onPressed: (){
-                     String exp = '+-x/';
+                     String exp = '+-x/%';
                     List<int> ind = [];
                     //amallarni indexini olish
                     for (int i = 0; i < controller.text.length; i++) {
@@ -200,9 +202,16 @@ Widget exp(String b,[Color colo=Colors.amber,]){
                         ind.removeAt(i);
                         i--;
                       }
+                    } for (int i = 0; i < ind.length; i++) {
+                      if (controller.text[ind[i]] == '%') {
+                        numbers[i] = numbers[i] % numbers[i + 1];
+                        numbers.removeAt(i + 1);
+                        ind.removeAt(i);
+                        i--;
+                      }
                     }
 
-                    controller.text = numbers[0].toStringAsFixed(3);
+                    controller.text = numbers[0].toStringAsFixed(2);
                   
               }, child: Text('=',style: TextStyle(fontSize: 30),),
               
