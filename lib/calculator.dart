@@ -22,32 +22,56 @@ class _CalculatorState extends State<Calculator> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.black,
         body: Column(children: [
            Flexible(child: resultWidget(),flex: 1,),
-           Flexible(child: buttonsWidget(),flex:2)
+           Flexible(child: buttonsWidget(),flex: 2,)
         ],),
       ));
   }
   Widget resultWidget(){
-return Column(
-  children: [
-  Container(
-    padding: const EdgeInsets.all(20),
-    alignment: Alignment.centerRight,
-    child: Text(
-      userInput,
-    style: const TextStyle(fontSize: 50,),
-    ),
-    ),
-     Container(
-    padding: const EdgeInsets.all(20),
-    alignment: Alignment.centerRight,
-    child: Text(
-      result,
-    style: const TextStyle(fontSize: 50,fontWeight: FontWeight.bold)
-    ),
-    )
-],);
+return SingleChildScrollView(
+  child:   SizedBox(
+    height: 550,
+    child: Column(
+    
+      children: [
+    
+      Container(
+    
+        padding: const EdgeInsets.all(20),
+    
+        alignment: Alignment.centerRight,
+    
+        child: Text(
+    
+          userInput,
+    
+        style: const TextStyle(fontSize: 50,color: Colors.white),
+    
+        ),
+    
+        ),
+    
+         Container(
+    
+        padding: const EdgeInsets.all(20),
+    
+        alignment: Alignment.centerRight,
+    
+        child: Text(
+    
+          result,
+    
+        style: const TextStyle(fontSize: 50,fontWeight: FontWeight.bold,color: Colors.white)
+    
+        ),
+    
+        )
+    
+    ],),
+  ),
+);
   }
   Widget buttonsWidget(){
     return GridView.builder(
@@ -75,8 +99,7 @@ return Column(
           shape: const CircleBorder(),
           
           ),
-        );
-        
+        ); 
   }
   handleButtonPress(String text){
     if(text =='AC'){
@@ -88,21 +111,17 @@ if(text =='C'){
   userInput = userInput.substring(0,userInput.length -1);
   return;
 }
-
 if(text =='='){
   result = calculate();
   if(result.endsWith('.0'));
   result = result.replaceAll(".0", '');
   return;
 }
-
     userInput = userInput +text;
   }
-  String calculate(){
-  
+  String calculate(){ 
       var exp = Parser().parse(userInput);
-      var evaluation= exp.evaluate(EvaluationType.REAL, ContextModel());
-    
+      var evaluation= exp.evaluate(EvaluationType.REAL, ContextModel()); 
     eatch(e){
       return "Error";
     }
@@ -118,5 +137,4 @@ if(text =='='){
       return Colors.blueGrey;
     }
  return Color.fromARGB(255, 46, 41, 41);
-  }
-}
+  }}
