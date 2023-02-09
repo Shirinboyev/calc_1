@@ -17,6 +17,8 @@
 //   }
 // }
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 void main(){
@@ -53,6 +55,10 @@ Widget exp(String b,[Color colo=Colors.amber,]){
        controller.text.substring(0,controller.text.length -1);
     }
     else  if(controller.text[controller.text.length - 1] == '-'){
+      controller.text =
+       controller.text.substring(0,controller.text.length -1);
+    }
+     else  if(controller.text[controller.text.length - 1] == '%'){
       controller.text =
        controller.text.substring(0,controller.text.length -1);
     }
@@ -101,7 +107,7 @@ Widget exp(String b,[Color colo=Colors.amber,]){
                     controller.text = controller.text.substring(0, controller.text.length-controller.text.length);
                   }, child: Text('AC',style: TextStyle(fontSize: 20),)),
            
-              wid('%',Colors.transparent),
+              exp('%',Colors.transparent),
     
             ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -150,7 +156,7 @@ Widget exp(String b,[Color colo=Colors.amber,]){
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70))
           ),
                 onPressed: (){
-                  String exp = '+-x/';
+                     String exp = '+-x/';
                     List<int> ind = [];
                     //amallarni indexini olish
                     for (int i = 0; i < controller.text.length; i++) {
@@ -158,8 +164,6 @@ Widget exp(String b,[Color colo=Colors.amber,]){
                         ind.add(i);
                       }
                     }
-                    
-
                     // raqamlarni olish
                     List<num> numbers = [];
                     int q = 0;
@@ -169,69 +173,37 @@ Widget exp(String b,[Color colo=Colors.amber,]){
                     }
                     numbers.add(
                         num.parse(controller.text.substring(ind.last + 1)));
-             setState(() {
-               
-                         String s = controller.text;
-                      int ind  = s.indexOf('+');
-                      if(ind != -1){
-                        String a = s.substring(0,ind);
-                        String b = s.substring(ind+1);
-                        int ans = int.parse(a)+int.parse(b);
-                        controller.text = ans.toString();
+
+                    for (int i = 0; i < ind.length; i++) {
+                      if (controller.text[ind[i]] == 'x') {
+                        numbers[i] = numbers[i] * numbers[i + 1];
+                        numbers.removeAt(i + 1);
+                        ind.removeAt(i);
+                        i--;
+                      } else if (controller.text[ind[i]] == '/') {
+                        numbers[i] = numbers[i] / numbers[i + 1];
+                        numbers.removeAt(i + 1);
+                        ind.removeAt(i);
+                        i--;
                       }
-             });
-                      setState(() {
-                       String s = controller.text;
-                      int ind  = s.indexOf('%');
-                      if(ind != -1){
-                        String a = s.substring(0,ind);
-                        String b = s.substring(ind+1);
-                        int ans = int.parse(a)%int.parse(b);
-                        controller.text = ans.toString();
+                    }
+
+                    for (int i = 0; i < ind.length; i++) {
+                      if (controller.text[ind[i]] == '+') {
+                        numbers[i] = numbers[i] + numbers[i + 1];
+                        numbers.removeAt(i + 1);
+                        ind.removeAt(i);
+                        i--;
+                      } else if (controller.text[ind[i]] == '-') {
+                        numbers[i] = numbers[i] - numbers[i + 1];
+                        numbers.removeAt(i + 1);
+                        ind.removeAt(i);
+                        i--;
                       }
-                      });
-                      setState(() {
-                           String s = controller.text;
-                      int ind  = s.indexOf('-');
-                      if(ind != -1){
-                        String a = s.substring(0,ind);
-                        String b = s.substring(ind+1);
-                        int ans = int.parse(a)-int.parse(b);
-                        controller.text = ans.toString();
-                      }
-                      },
-                      ); setState(() {
-                           String s = controller.text;
-                      int ind  = s.indexOf('x');
-                      if(ind != -1){
-                        String a = s.substring(0,ind);
-                        String b = s.substring(ind+1);
-                        int ans = int.parse(a)*int.parse(b);
-                        controller.text = ans.toString();
-                      }
-                      },
-                      ); setState(() {
-                          
-                           String s = controller.text;
-                      int ind  = s.indexOf('/');
-                      if(ind != -1){
-                        String a = s.substring(0,ind);
-                        String b = s.substring(ind+1);
-                        int ans = int.parse(a)~/int.parse(b);
-                        controller.text = ans.toString();
-                      }
-                      },
-                      );setState(() {
-                          
-                           String s = controller.text;
-                      int ind  = s.indexOf('%');
-                      if(ind != -1){
-                        String a = s.substring(0,ind);
-                        String b = s.substring(ind+1);
-                        int ans = int.parse(a)%int.parse(b);
-                        controller.text = ans.toString();
-                      }
-                      });
+                    }
+
+                    controller.text = numbers[0].toStringAsFixed(3);
+                  
               }, child: Text('=',style: TextStyle(fontSize: 30),),
               
               ),
